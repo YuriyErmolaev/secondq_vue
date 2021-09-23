@@ -21,6 +21,8 @@
 
     <div class="warn">{{warn}}</div>
 
+    <button v-for="(num, key) in nums" :key="key">{{num}}</button>
+
   </div>
 </template>
 
@@ -66,6 +68,13 @@ export default {
         this.warn = ''
         this.result = Math.floor(op1 / op2)
       }
+    }
+  },
+  computed: {
+    nums () {
+      const numAr = []
+      for (let i = 0; i <= 9; i++) numAr.push(i)
+      return numAr
     }
   }
 }
