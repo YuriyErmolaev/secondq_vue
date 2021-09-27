@@ -1,44 +1,73 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <Calc />
+    <div class="header">My personal costs</div>
+    <main>
+      <add-payment-form @addNewPayment="addNewPayment" />
+      <PaymentDisplay
+        :show-items="true"
+        :items="paymentsList"
+      />
+    </main>
   </div>
 </template>
 
 <script>
-import Calc from './components/Calc'
+import PaymentDisplay from './components/PaymentDisplay'
+import AddPaymentForm from './components/AddPaymentForm'
 
 export default {
   name: 'App',
   components: {
-    Calc
+    AddPaymentForm,
+    PaymentDisplay
   },
   data: () => ({
-    message: 'Hi! )',
-    isShowTitle: false,
-    c: 0,
-    a: 1,
-    b: 1
+    paymentsList: []
   }),
   methods: {
-    doThat (str, event) {
-      console.log(str, event)
-      this.c = 0
+    fetchData () {
+      return [
+        {
+          date: '28.03.2020',
+          category: 'Food',
+          value: 169
+        },
+        {
+          date: '24.03.2020',
+          category: 'Transport',
+          value: 360
+        },
+        {
+          date: '24.03.2020',
+          category: 'Food',
+          value: 532
+        }
+      ]
+    },
+    addNewPayment (data) {
+      // this.paymentsList.push(data)
+      this.paymentsList = [...this.paymentsList, data]
     }
+  },
+  created () {
+    this.paymentsList = this.fetchData()
   }
 }
 </script>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-button {
-  cursor: pointer;
-}
+<style lang="sass">
+#app
+  font-family: Avenir, Helvetica, Arial, sans-serif
+  -webkit-font-smoothing: antialiased
+  -moz-osx-font-smoothing: grayscale
+  text-align: center
+  color: #2c3e50
+  margin-top: 60px
+
+button
+  cursor: pointer
+
+.header
+  color: red
+
 </style>
