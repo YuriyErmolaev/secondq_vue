@@ -1,8 +1,8 @@
 <template>
   <div class="form">
-    <input placeholder="Amount" v-model="amount" />
-    <input placeholder="Type" v-model="type" />
     <input placeholder="Date" v-model="date" />
+    <input placeholder="Category" v-model="category" />
+    <input placeholder="Amount" v-model="value" />
     <button @click="onSaveClick" >Save!</button>
   </div>
 </template>
@@ -12,17 +12,17 @@ export default {
   name: 'AddPaymentForm',
   data () {
     return {
-      amount: '',
-      type: '',
-      date: ''
+      date: '',
+      category: '',
+      value: ''
     }
   },
   methods: {
     onSaveClick () {
       const data = {
-        amount: this.amount,
-        type: this.type,
-        date: this.date || this.getCurrentDate
+        date: this.date || this.getCurrentDate,
+        category: this.category,
+        value: this.value
       }
       this.$emit('addNewPayment', data)
     }

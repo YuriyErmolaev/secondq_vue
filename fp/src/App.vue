@@ -1,7 +1,7 @@
 <template>
-  <div id="app">
-    <div class="header">My personal costs</div>
-    <main>
+  <div id="app" >
+    <div class="header container">My personal costs</div>
+    <main class="container">
       <button @click="showForm = !showForm">
         ADD NEW COST <span v-show="!showForm">+</span> <span v-show="showForm">-</span>
       </button>
@@ -62,6 +62,10 @@ export default {
 </script>
 
 <style lang="sass">
+.container
+  margin: 0 auto
+  max-width: 1100px
+
 #app
   font-family: Avenir, Helvetica, Arial, sans-serif
   -webkit-font-smoothing: antialiased
