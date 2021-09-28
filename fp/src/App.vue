@@ -2,7 +2,12 @@
   <div id="app">
     <div class="header">My personal costs</div>
     <main>
-      <add-payment-form @addNewPayment="addNewPayment" />
+      <button @click="showForm = !showForm">
+        ADD NEW COST <span v-show="!showForm">+</span> <span v-show="showForm">-</span>
+      </button>
+      <div v-show="showForm">
+        <add-payment-form @addNewPayment="addNewPayment" />
+      </div>
       <PaymentDisplay
         :show-items="true"
         :items="paymentsList"
@@ -22,7 +27,8 @@ export default {
     PaymentDisplay
   },
   data: () => ({
-    paymentsList: []
+    paymentsList: [],
+    showForm: false
   }),
   methods: {
     fetchData () {
