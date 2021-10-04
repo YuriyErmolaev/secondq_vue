@@ -2,6 +2,9 @@
   <div id="app" >
     <div class="header container">My personal costs</div>
     <main class="container">
+      <div>
+        Total summ: {{totalSumm}}
+      </div>
       <button @click="showForm = !showForm">
         ADD NEW COST <span v-show="!showForm">+</span> <span v-show="showForm">-</span>
       </button>
@@ -19,6 +22,8 @@
 <script>
 import PaymentDisplay from './components/PaymentDisplay'
 import AddPaymentForm from './components/AddPaymentForm'
+// import { mapMutations } from 'vuex'
+import { mapMutations, mapGetters } from 'vuex'
 
 export default {
   name: 'App',
@@ -27,10 +32,24 @@ export default {
     PaymentDisplay
   },
   data: () => ({
-    paymentsList: [],
     showForm: false
   }),
+  computed: {
+    totalSumm () {
+      return this.$store.getters.getPaymentsListSum
+    },
+    paymentsList () {
+      return this.$store.getters.getPaymentsList
+    },
+    ...mapGetters([
+      'getPaymentsList'
+    ])
+  },
   methods: {
+    ...mapMutations(
+      // ['setPaymentsListData']
+      { addData: 'setPaymentsListData' }
+    ),
     fetchData () {
       return [
         {
@@ -52,11 +71,15 @@ export default {
     },
     addNewPayment (data) {
       // this.paymentsList.push(data)
-      this.paymentsList = [...this.paymentsList, data]
+      // this.paymentsList = [...this.paymentsList, data]
+      this.$store.commit('addItemToPaymentList', data)
     }
   },
   created () {
-    this.paymentsList = this.fetchData()
+    // this.paymentsList = this.fetchData()
+    // this.$store.commit('setPaymentsListData', this.fetchData())
+    // this.setPaymentsListData(this.fetchData())
+    this.addData(this.fetchData())
   }
 }
 </script>
