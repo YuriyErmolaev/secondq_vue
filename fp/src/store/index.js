@@ -21,26 +21,24 @@ export default new Vuex.Store({
   },
   actions: {
     fetchData ({ commit }) {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve([
-            {
-              date: '28.03.2020',
-              category: 'Food',
-              value: 169
-            },
-            {
-              date: '24.03.2020',
-              category: 'Transport',
-              value: 360
-            },
-            {
-              date: '24.03.2020',
-              category: 'Food',
-              value: 532
-            }
-          ])
-        }, 1000)
+      return new Promise((resolve, reject) => {
+        const url = 'https://raw.githubusercontent.com/YuriyErmolaev/share/main/costs.json'
+        const xhr = new XMLHttpRequest()
+        xhr.open('GET', url, true)
+        xhr.responseType = 'json'
+        xhr.onload = function () {
+          if (this.status === 200) {
+            resolve(this.response)
+          } else {
+            var error = new Error(this.statusText)
+            error.code = this.status
+            reject(error)
+          }
+        }
+        xhr.onerror = function () {
+          reject(new Error('Network Error'))
+        }
+        xhr.send()
       }).then(res => {
         commit('setPaymentsListData', res)
       })

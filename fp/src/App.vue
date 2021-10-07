@@ -22,7 +22,7 @@
 <script>
 import PaymentDisplay from './components/PaymentDisplay'
 import AddPaymentForm from './components/AddPaymentForm'
-// import { mapMutations } from 'vuex'
+
 import { mapMutations, mapGetters } from 'vuex'
 
 export default {
@@ -32,7 +32,8 @@ export default {
     PaymentDisplay
   },
   data: () => ({
-    showForm: false
+    showForm: false//,
+    // db:
   }),
   computed: {
     totalSumm () {
@@ -48,22 +49,15 @@ export default {
   },
   methods: {
     ...mapMutations(
-      // ['setPaymentsListData']
       {
         addData: 'setPaymentsListData'
       }
     ),
     addNewPayment (data) {
-      // this.paymentsList.push(data)
-      // this.paymentsList = [...this.paymentsList, data]
       this.$store.commit('addItemToPaymentList', data)
     }
   },
   created () {
-    // this.paymentsList = this.fetchData()
-    // this.$store.commit('setPaymentsListData', this.fetchData())
-    // this.setPaymentsListData(this.fetchData())
-    // this.addData(this.fetchData())
     this.$store.dispatch('fetchData')
     this.$store.dispatch('fetchCategoryList')
   }
