@@ -9,7 +9,7 @@
         ADD NEW COST <span v-show="!showForm">+</span> <span v-show="showForm">-</span>
       </button>
       <div v-show="showForm">
-        <add-payment-form @addNewPayment="addNewPayment" />
+        <add-payment-form @addNewPayment="addNewPayment" :category-list="getCategoryList"/>
       </div>
       <PaymentDisplay
         :show-items="true"
@@ -42,33 +42,17 @@ export default {
       return this.$store.getters.getPaymentsList
     },
     ...mapGetters([
-      'getPaymentsList'
+      'getPaymentsList',
+      'getCategoryList'
     ])
   },
   methods: {
     ...mapMutations(
       // ['setPaymentsListData']
-      { addData: 'setPaymentsListData' }
+      {
+        addData: 'setPaymentsListData'
+      }
     ),
-    fetchData () {
-      return [
-        {
-          date: '28.03.2020',
-          category: 'Food',
-          value: 169
-        },
-        {
-          date: '24.03.2020',
-          category: 'Transport',
-          value: 360
-        },
-        {
-          date: '24.03.2020',
-          category: 'Food',
-          value: 532
-        }
-      ]
-    },
     addNewPayment (data) {
       // this.paymentsList.push(data)
       // this.paymentsList = [...this.paymentsList, data]
@@ -79,7 +63,9 @@ export default {
     // this.paymentsList = this.fetchData()
     // this.$store.commit('setPaymentsListData', this.fetchData())
     // this.setPaymentsListData(this.fetchData())
-    this.addData(this.fetchData())
+    // this.addData(this.fetchData())
+    this.$store.dispatch('fetchData')
+    this.$store.dispatch('fetchCategoryList')
   }
 }
 </script>
