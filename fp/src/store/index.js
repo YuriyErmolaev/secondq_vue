@@ -30,7 +30,7 @@ export default new Vuex.Store({
           if (this.status === 200) {
             resolve(this.response)
           } else {
-            var error = new Error(this.statusText)
+            const error = new Error(this.statusText)
             error.code = this.status
             reject(error)
           }
