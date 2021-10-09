@@ -15,6 +15,7 @@
         :show-items="true"
         :items="paymentsList"
       />
+      <Pagination/>
     </main>
   </div>
 </template>
@@ -22,6 +23,7 @@
 <script>
 import PaymentDisplay from './components/PaymentDisplay'
 import AddPaymentForm from './components/AddPaymentForm'
+import Pagination from './components/Pagination'
 
 import { mapMutations, mapGetters } from 'vuex'
 
@@ -29,11 +31,12 @@ export default {
   name: 'App',
   components: {
     AddPaymentForm,
-    PaymentDisplay
+    PaymentDisplay,
+    Pagination
   },
   data: () => ({
-    showForm: false//,
-    // db:
+    showForm: false,
+    pageNum: 1
   }),
   computed: {
     totalSumm () {
@@ -58,7 +61,6 @@ export default {
     }
   },
   created () {
-    this.$store.dispatch('fetchData')
     this.$store.dispatch('fetchCategoryList')
   }
 }

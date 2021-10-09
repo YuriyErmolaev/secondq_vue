@@ -20,15 +20,16 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    fetchData ({ commit }) {
+    fetchData ({ commit }, { pageNum }) {
       return new Promise((resolve, reject) => {
+        const pageName = 'page' + pageNum
         const url = 'https://raw.githubusercontent.com/YuriyErmolaev/share/main/costs.json'
         const xhr = new XMLHttpRequest()
         xhr.open('GET', url, true)
         xhr.responseType = 'json'
         xhr.onload = function () {
           if (this.status === 200) {
-            resolve(this.response)
+            resolve(this.response[pageName])
           } else {
             const error = new Error(this.statusText)
             error.code = this.status
