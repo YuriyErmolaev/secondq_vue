@@ -6,6 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     paymentsList: [],
+    paymentsListAll: {},
     categoryList: []
   },
   mutations: {
@@ -17,29 +18,49 @@ export default new Vuex.Store({
     },
     addItemToPaymentList (state, payload) {
       state.paymentsList.push(payload)
+    },
+    addItemToPaymentListAll (state, payload) {
+      state.paymentsListAll[payload.pageNum] = payload.list
     }
   },
+  getters: {
+    getPaymentsList: state => state.paymentsList,
+    getPaymentsListAll: state => state.paymentsListAll,
+    getPaymentsListSum: state => state.paymentsList.reduce((sum, cur) => sum + cur.value, 0),
+    getCategoryList: state => state.categoryList
+  },
   actions: {
-    fetchData ({ commit }, { pageNum }) {
+    fetchData ({ commit, getters }, { pageNum }, state) {
       return new Promise((resolve, reject) => {
+        // console.log('getPaymentsListAll', getters.getPaymentsListAll)
         const pageName = 'page' + pageNum
-        const url = 'https://raw.githubusercontent.com/YuriyErmolaev/share/main/costs.json'
-        const xhr = new XMLHttpRequest()
-        xhr.open('GET', url, true)
-        xhr.responseType = 'json'
-        xhr.onload = function () {
-          if (this.status === 200) {
-            resolve(this.response[pageName])
-          } else {
-            const error = new Error(this.statusText)
-            error.code = this.status
-            reject(error)
+        // if (getters.getPaymentsListAll.hasOwnProperty(pageName)){
+        if (Object.prototype.hasOwnProperty.call(getters.getPaymentsListAll, pageName)) {
+          resolve(getters.getPaymentsListAll[pageName])
+        } else {
+          const url = 'https://raw.githubusercontent.com/YuriyErmolaev/share/main/costs.json'
+          const xhr = new XMLHttpRequest()
+          xhr.open('GET', url, true)
+          xhr.responseType = 'json'
+          xhr.onload = function () {
+            if (this.status === 200) {
+              const listItem = {
+                pageNum: pageNum,
+                list: this.response[pageName]
+              }
+              commit('addItemToPaymentListAll', listItem)
+              resolve(this.response[pageName])
+            } else {
+              const error = new Error(this.statusText)
+              error.code = this.status
+              reject(error)
+            }
           }
+          xhr.onerror = function () {
+            reject(new Error('Network Error'))
+          }
+          xhr.send()
         }
-        xhr.onerror = function () {
-          reject(new Error('Network Error'))
-        }
-        xhr.send()
       }).then(res => {
         commit('setPaymentsListData', res)
       })
@@ -55,10 +76,6 @@ export default new Vuex.Store({
         commit('setCategoryList', res)
       })
     }
-  },
-  getters: {
-    getPaymentsList: state => state.paymentsList,
-    getPaymentsListSum: state => state.paymentsList.reduce((sum, cur) => sum + cur.value, 0),
-    getCategoryList: state => state.categoryList
   }
+
 })
