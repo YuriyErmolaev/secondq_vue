@@ -19,6 +19,10 @@ export default {
       type: Array,
       default: () => []
     }
+    // ,
+    // pdate,
+    // pcategory,
+    // pvalue
   },
   data () {
     return {
@@ -35,6 +39,18 @@ export default {
         value: Number(this.value)
       }
       this.$emit('addNewPayment', data)
+    },
+    fillForm () {
+      const category = this.$route.params.category
+      const value = this.$route.query.value
+      if (category || value) {
+        this.category = category
+        this.value = value
+        this.date = this.getCurrentDate
+      }
+      if (category && value) {
+        this.onSaveClick()
+      }
     }
   },
   computed: {
@@ -43,7 +59,12 @@ export default {
       const d = today.getDate()
       const m = today.getMonth() + 1
       const y = today.getFullYear()
-      return `${d}${m}${y}`
+      return `${d}.${m}.${y}`
+    }
+  },
+  watch: {
+    $route (to, from) {
+      this.fillForm()
     }
   }
 }

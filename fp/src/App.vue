@@ -9,7 +9,20 @@
         ADD NEW COST <span v-show="!showForm">+</span> <span v-show="showForm">-</span>
       </button>
       <div v-show="showForm">
-        <add-payment-form @addNewPayment="addNewPayment" :category-list="getCategoryList"/>
+        <add-payment-form
+          @addNewPayment="addNewPayment"
+          :category-list="getCategoryList"
+          :pdate="sendDate"
+          :pcategory="sendCategory"
+          :pvalue="sendValue"
+        />
+      </div>
+      <div class="autoAddLinks">
+        <router-link to="/add/payment/Food?value=200">Add 200 Food</router-link>
+        <router-link to="/add/payment/Transport?value=50">Add 50 Transport</router-link>
+        <router-link to="/add/payment/Entertainment?value=2000">Add 2000 Entertainment</router-link>
+        <router-link to="/add/payment/Food">Add Food</router-link>
+        <router-link to="/add/payment?value=200">Add 200</router-link>
       </div>
       <PaymentDisplay
         :show-items="true"
@@ -36,7 +49,10 @@ export default {
   },
   data: () => ({
     showForm: false,
-    pageNum: 1
+    pageNum: 1,
+    sendDate: '',
+    sendCategory: '',
+    sendValue: ''
   }),
   computed: {
     totalSumm () {
@@ -58,6 +74,18 @@ export default {
     ),
     addNewPayment (data) {
       this.$store.commit('addItemToPaymentList', data)
+    },
+    addItem () {
+      const category = this.$route.params.category
+      const value = this.$route.query.value
+      if (category || value) {
+        this.showForm = true
+      }
+    }
+  },
+  watch: {
+    $route (to, from) {
+      this.addItem()
     }
   },
   created () {
@@ -67,6 +95,10 @@ export default {
 </script>
 
 <style lang="sass">
+.autoAddLinks
+  display: flex
+  flex-direction: column
+
 .container
   margin: 0 auto
   max-width: 1100px
