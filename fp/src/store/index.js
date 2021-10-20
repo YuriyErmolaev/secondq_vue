@@ -19,6 +19,28 @@ export default new Vuex.Store({
     addItemToPaymentList (state, payload) {
       state.paymentsList.push(payload)
     },
+    delItemFromPaymentList (state, itemId) {
+      const item = state.paymentsList.find(element => element.id === itemId)
+      const indexItem = state.paymentsList.indexOf(item)
+      state.paymentsList.splice(indexItem, 1)
+    },
+    changeItemInPaymentList (state, data) {
+      const itemId = data.itemId
+      const payload = data.data
+
+      payload.id = itemId
+
+      console.log('itemId', itemId)
+      console.log('payload', payload)
+
+      const item = state.paymentsList.find(element => element.id === itemId)
+      const indexItem = state.paymentsList.indexOf(item)
+      console.log('indexItem for change: ', indexItem)
+
+      console.log('state.paymentsList[indexItem]: ', state.paymentsList[indexItem])
+      // state.paymentsList[indexItem] = payload
+      Vue.set(state.paymentsList, indexItem, payload)
+    },
     addItemToPaymentListAll (state, payload) {
       state.paymentsListAll[payload.pageNum] = payload.list
     }

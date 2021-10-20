@@ -11,12 +11,18 @@
       <div v-show="showForm">
         <add-payment-form
           @addNewPayment="addNewPayment"
+          @changePayment="changePayment"
           :category-list="getCategoryList"
           :pdate="sendDate"
           :pcategory="sendCategory"
           :pvalue="sendValue"
         />
       </div>
+      <Popup
+        v-show="showPopup"
+        :ModalWindoW="ModalWindoW"
+        :modalWindowSettings="modalWindowSettings"
+      />
       <div class="autoAddLinks">
         <router-link to="/add/payment/Food?value=200">Add 200 Food</router-link>
         <router-link to="/add/payment/Transport?value=50">Add 50 Transport</router-link>
@@ -37,6 +43,7 @@
 import PaymentDisplay from './components/PaymentDisplay'
 import AddPaymentForm from './components/AddPaymentForm'
 import Pagination from './components/Pagination'
+import Popup from './components/Popup'
 
 import { mapMutations, mapGetters } from 'vuex'
 
@@ -45,14 +52,18 @@ export default {
   components: {
     AddPaymentForm,
     PaymentDisplay,
-    Pagination
+    Pagination,
+    Popup
   },
   data: () => ({
     showForm: false,
     pageNum: 1,
     sendDate: '',
     sendCategory: '',
-    sendValue: ''
+    sendValue: '',
+    showPopup: false,
+    ModalWindoW: '',
+    modalWindowSettings: {}
   }),
   computed: {
     totalSumm () {
@@ -75,18 +86,36 @@ export default {
     addNewPayment (data) {
       this.$store.commit('addItemToPaymentList', data)
     },
+    changePayment (itemId, data) {
+      console.log('data', data)
+      this.$store.commit('changeItemInPaymentList', itemId, data)
+    },
     addItem () {
       const category = this.$route.params.category
       const value = this.$route.query.value
       if (category || value) {
         this.showForm = true
       }
+    },
+    onShown (settings) {
+      this.showPopup = true
+      this.ModalWindoW = settings.name
+      this.modalWindowSettings = settings
+    },
+    onHide () {
+      this.showPopup = false
+      this.ModalWindoW = ''
+      this.modalWindowSettings = {}
     }
   },
   watch: {
     $route (to, from) {
       this.addItem()
     }
+  },
+  mounted () {
+    this.$modal.EventBus.$on('shown', this.onShown)
+    this.$modal.EventBus.$on('hide', this.onHide)
   },
   created () {
     this.$store.dispatch('fetchCategoryList')

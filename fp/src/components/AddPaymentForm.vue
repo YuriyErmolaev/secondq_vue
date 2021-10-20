@@ -18,11 +18,14 @@ export default {
     categoryList: {
       type: Array,
       default: () => []
+    },
+    edit: {
+      type: Boolean,
+      default: false
+    },
+    itemId: {
+      type: Number
     }
-    // ,
-    // pdate,
-    // pcategory,
-    // pvalue
   },
   data () {
     return {
@@ -38,7 +41,17 @@ export default {
         category: this.category,
         value: Number(this.value)
       }
-      this.$emit('addNewPayment', data)
+      console.log('this.edit', this.edit)
+      if (this.edit) {
+        // this.$emit('changePayment', this.itemId, data)
+        const complexData = {
+          itemId: this.itemId,
+          data: data
+        }
+        this.$store.commit('changeItemInPaymentList', complexData)
+      } else {
+        this.$emit('addNewPayment', data)
+      }
     },
     fillForm () {
       const category = this.$route.params.category
