@@ -1,42 +1,44 @@
 <template>
-  <div id="app" >
-    <div class="header container">My personal costs</div>
-    <main class="container">
-      <div>
-        Total summ: {{totalSumm}}
-      </div>
-      <button @click="showForm = !showForm">
-        ADD NEW COST <span v-show="!showForm">+</span> <span v-show="showForm">-</span>
-      </button>
-      <div v-show="showForm">
-        <add-payment-form
-          @addNewPayment="addNewPayment"
-          @changePayment="changePayment"
-          :category-list="getCategoryList"
-          :pdate="sendDate"
-          :pcategory="sendCategory"
-          :pvalue="sendValue"
-        />
-      </div>
-      <Popup
-        v-show="showPopup"
-        :ModalWindoW="ModalWindoW"
-        :modalWindowSettings="modalWindowSettings"
-      />
-      <div class="autoAddLinks">
-        <router-link to="/add/payment/Food?value=200">Add 200 Food</router-link>
-        <router-link to="/add/payment/Transport?value=50">Add 50 Transport</router-link>
-        <router-link to="/add/payment/Entertainment?value=2000">Add 2000 Entertainment</router-link>
-        <router-link to="/add/payment/Food">Add Food</router-link>
-        <router-link to="/add/payment?value=200">Add 200</router-link>
-      </div>
-      <PaymentDisplay
-        :show-items="true"
-        :items="paymentsList"
-      />
-      <Pagination/>
-    </main>
-  </div>
+  <v-app>
+    <v-main>
+        <div class="header container">My personal costs</div>
+        <main class="container">
+          <div>
+            Total summ: {{totalSumm}}
+          </div>
+          <button @click="showForm = !showForm">
+            ADD NEW COST <span v-show="!showForm">+</span> <span v-show="showForm">-</span>
+          </button>
+          <div v-show="showForm">
+            <add-payment-form
+              @addNewPayment="addNewPayment"
+              @changePayment="changePayment"
+              :category-list="getCategoryList"
+              :pdate="sendDate"
+              :pcategory="sendCategory"
+              :pvalue="sendValue"
+            />
+          </div>
+          <Popup
+            v-show="showPopup"
+            :ModalWindoW="ModalWindoW"
+            :modalWindowSettings="modalWindowSettings"
+          />
+          <div class="autoAddLinks">
+            <v-btn to="/add/payment/Food?value=200">Add 200 Food</v-btn>
+            <v-btn to="/add/payment/Transport?value=50">Add 50 Transport</v-btn>
+            <router-link to="/add/payment/Entertainment?value=2000">Add 2000 Entertainment</router-link>
+            <router-link to="/add/payment/Food">Add Food</router-link>
+            <router-link to="/add/payment?value=200">Add 200</router-link>
+          </div>
+          <PaymentDisplay
+            :show-items="true"
+            :items="paymentsList"
+          />
+          <Pagination/>
+        </main>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
