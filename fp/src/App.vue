@@ -24,6 +24,9 @@
             :ModalWindoW="ModalWindoW"
             :modalWindowSettings="modalWindowSettings"
           />
+          <test-component
+            message="Hello from test component! )"
+          ></test-component>
           <div class="autoAddLinks">
             <v-btn to="/add/payment/Food?value=200">Add 200 Food</v-btn>
             <v-btn to="/add/payment/Transport?value=50">Add 50 Transport</v-btn>
@@ -48,10 +51,12 @@ import Pagination from './components/Pagination'
 import Popup from './components/Popup'
 
 import { mapMutations, mapGetters } from 'vuex'
+import TestComponent from './components/TestComponent'
 
 export default {
   name: 'App',
   components: {
+    TestComponent,
     AddPaymentForm,
     PaymentDisplay,
     Pagination,
