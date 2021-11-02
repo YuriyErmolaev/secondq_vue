@@ -1,8 +1,8 @@
 <template>
   <div class="form">
-    <input placeholder="Date" v-model="date" />
-    <input placeholder="Amount" v-model="value" />
-    <select v-model="category">
+    <input placeholder="Date" v-model="date" name="date" />
+    <input placeholder="Amount" v-model="value" name="amount" />
+    <select v-model="category" name="category">
       <option v-for="(categoryName, idx) in categoryList" :key="idx">
         {{ categoryName }}
       </option>
