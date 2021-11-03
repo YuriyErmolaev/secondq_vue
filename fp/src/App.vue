@@ -84,15 +84,11 @@ export default {
     ModalWindoW: '',
     modalWindowSettings: {},
     chartData: {
-      labels: ['Food', 'Education', 'Sport'],
+      labels: ['Food', 'Education', 'Sport', 'Entertaiment'],
       datasets: [
         {
           label: '# of Votes',
-          data: [
-            169,
-            50,
-            450
-          ],
+          data: [0, 0, 0, 0],
           backgroundColor: [
             'rgba(255, 99, 132, 0.2)',
             'rgba(54, 162, 235, 0.2)',
@@ -169,10 +165,8 @@ export default {
       const summ = paymentsList
         .filter(item => item.category === category)
         .reduce((acc, currentValue) => {
-          return acc + currentValue.amount
+          return acc + currentValue.value
         }, 0)
-      console.log('summ', summ)
-      if (summ === 0) return 169
       return summ
     }
   },
@@ -180,16 +174,25 @@ export default {
   watch: {
     $route (to, from) {
       this.addItem()
+    },
+    paymentsList () {
+      this.chartData.datasets[0].data[0] = this.getCategorySumm('Food')
+      this.chartData.datasets[0].data[1] = this.getCategorySumm('Education')
+      this.chartData.datasets[0].data[2] = this.getCategorySumm('Sport')
+      this.chartData.datasets[0].data[3] = this.getCategorySumm('Entertaiment')
     }
   },
   mounted () {
     this.$modal.EventBus.$on('shown', this.onShown)
     this.$modal.EventBus.$on('hide', this.onHide)
-    this.chartData.datasets[0].data[0] = this.getCategorySumm('Food')
+    // this.chartData.datasets[0].data[0] = this.getCategorySumm('Food')
   },
   created () {
     this.$store.dispatch('fetchCategoryList')
     this.chartData.datasets[0].data[0] = this.getCategorySumm('Food')
+    this.chartData.datasets[0].data[1] = this.getCategorySumm('Education')
+    this.chartData.datasets[0].data[2] = this.getCategorySumm('Sport')
+    this.chartData.datasets[0].data[3] = this.getCategorySumm('Entertaiment')
   }
 }
 </script>
