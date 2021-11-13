@@ -3,7 +3,7 @@
     <v-main>
       <v-container>
         <v-row>
-          <v-col>
+          <v-col md="6">
             <div class="header container">My personal costs</div>
             <div>
               Total summ: {{totalSumm}}
@@ -42,11 +42,13 @@
             />
             <Pagination/>
           </v-col>
-          <v-col>
-            <Chart
-              :chartdata="chartData"
+          <v-col md="6">
+            <div class="chart-container">
+              <Chart
+              :chartdata="chartDataSend"
               :options="chartOptions"
             ></Chart>
+            </div>
           </v-col>
         </v-row>
       </v-container>
@@ -83,38 +85,10 @@ export default {
     showPopup: false,
     ModalWindoW: '',
     modalWindowSettings: {},
-    chartData: {
-      labels: ['Food', 'Education', 'Sport', 'Entertaiment'],
-      datasets: [
-        {
-          label: '# of Votes',
-          data: [0, 0, 0, 0],
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(255, 206, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
-            'rgba(255, 159, 64, 0.2)'
-          ],
-          borderColor: [
-            'rgba(255, 99, 132, 1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)'
-          ],
-          borderWidth: 1
-        }
-      ]
-    },
+    chartDataSend: [0, 0, 0, 0],
     chartOptions: {
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      }
+      responsive: true,
+      maintainAspectRatio: false
     }
   }),
   computed: {
@@ -161,13 +135,20 @@ export default {
     },
     getCategorySumm (category) {
       const paymentsList = this.$store.getters.getPaymentsList
-      console.log('paymentsList', paymentsList)
       const summ = paymentsList
         .filter(item => item.category === category)
         .reduce((acc, currentValue) => {
           return acc + currentValue.value
         }, 0)
       return summ
+    },
+    updateChartData () {
+      const arDataChart = []
+      arDataChart[0] = this.getCategorySumm('Food')
+      arDataChart[1] = this.getCategorySumm('Education')
+      arDataChart[2] = this.getCategorySumm('Sport')
+      arDataChart[3] = this.getCategorySumm('Entertaiment')
+      this.chartDataSend = [...arDataChart]
     }
   },
 
@@ -176,28 +157,25 @@ export default {
       this.addItem()
     },
     paymentsList () {
-      this.chartData.datasets[0].data[0] = this.getCategorySumm('Food')
-      this.chartData.datasets[0].data[1] = this.getCategorySumm('Education')
-      this.chartData.datasets[0].data[2] = this.getCategorySumm('Sport')
-      this.chartData.datasets[0].data[3] = this.getCategorySumm('Entertaiment')
+      this.updateChartData()
     }
   },
   mounted () {
     this.$modal.EventBus.$on('shown', this.onShown)
     this.$modal.EventBus.$on('hide', this.onHide)
-    // this.chartData.datasets[0].data[0] = this.getCategorySumm('Food')
+    this.updateChartData()
   },
   created () {
     this.$store.dispatch('fetchCategoryList')
-    this.chartData.datasets[0].data[0] = this.getCategorySumm('Food')
-    this.chartData.datasets[0].data[1] = this.getCategorySumm('Education')
-    this.chartData.datasets[0].data[2] = this.getCategorySumm('Sport')
-    this.chartData.datasets[0].data[3] = this.getCategorySumm('Entertaiment')
+    this.updateChartData()
   }
 }
 </script>
 
 <style lang="sass">
+
+.chart-container
+
 .autoAddLinks
   display: flex
   flex-direction: column
