@@ -2,47 +2,66 @@
   <v-app>
     <v-main>
       <v-container>
+        <v-app-bar app>
+          <v-row>
+            <v-col>
+              <v-btn to="/add/payment/Food?value=200">Add 200 Food</v-btn>
+            </v-col>
+            <v-col>
+              <v-btn to="/add/payment/Transport?value=50">Add 50 Transport</v-btn>
+            </v-col>
+            <v-col>
+              <v-btn to="/add/payment/Entertainment?value=2000">Add 2000 Entertainment</v-btn>
+            </v-col>
+            <v-col>
+              <router-link to="/add/payment/Food">Add Food</router-link>
+            </v-col>
+            <v-col>
+              <router-link to="/add/payment?value=200">Add 200</router-link>
+            </v-col>
+          </v-row>
+        </v-app-bar>
         <v-row>
-          <v-col md="6">
-            <div class="header container">My personal costs</div>
-            <div>
-              Total summ: {{totalSumm}}
-            </div>
-            <button @click="showForm = !showForm">
-              ADD NEW COST <span v-show="!showForm">+</span> <span v-show="showForm">-</span>
-            </button>
-            <div v-show="showForm">
+          <v-col>
+            <h1 class="text-md-h3">My personal costs</h1>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <h2 class="text--accent-4 ma-8">Total summ: {{totalSumm}}</h2>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col class="pa-8" md="6">
+            <v-dialog v-model="dialog" width="500">
+              <template v-slot:activator="{on}">
+                <v-btn class="ma-8" v-on="on">
+                  ADD NEW COST
+                </v-btn>
+              </template>
               <add-payment-form
-                @addNewPayment="addNewPayment"
-                @changePayment="changePayment"
-                :category-list="getCategoryList"
-                :pdate="sendDate"
-                :pcategory="sendCategory"
-                :pvalue="sendValue"
-              />
-            </div>
+                  @addNewPayment="addNewPayment"
+                  @changePayment="changePayment"
+                  @closeAddPaymentForm="closeAddPaymentForm"
+                  :category-list="getCategoryList"
+                  :pdate="sendDate"
+                  :pcategory="sendCategory"
+                  :pvalue="sendValue"
+                />
+            </v-dialog>
+
             <Popup
               v-show="showPopup"
               :ModalWindoW="ModalWindoW"
               :modalWindowSettings="modalWindowSettings"
             />
-            <test-component
-              message="Hello from test component! )"
-            ></test-component>
-            <div class="autoAddLinks">
-              <v-btn to="/add/payment/Food?value=200">Add 200 Food</v-btn>
-              <v-btn to="/add/payment/Transport?value=50">Add 50 Transport</v-btn>
-              <router-link to="/add/payment/Entertainment?value=2000">Add 2000 Entertainment</router-link>
-              <router-link to="/add/payment/Food">Add Food</router-link>
-              <router-link to="/add/payment?value=200">Add 200</router-link>
-            </div>
             <PaymentDisplay
               :show-items="true"
               :items="paymentsList"
             />
             <Pagination/>
           </v-col>
-          <v-col md="6">
+          <v-col class="pa-8" md="6">
             <div class="chart-container">
               <Chart
               :chartdata="chartDataSend"
@@ -61,23 +80,20 @@ import PaymentDisplay from './components/PaymentDisplay'
 import AddPaymentForm from './components/AddPaymentForm'
 import Pagination from './components/Pagination'
 import Popup from './components/Popup'
-
 import { mapMutations, mapGetters } from 'vuex'
-import TestComponent from './components/TestComponent'
 import Chart from './components/Chart'
 
 export default {
   name: 'App',
   components: {
     Chart,
-    TestComponent,
     AddPaymentForm,
     PaymentDisplay,
     Pagination,
     Popup
   },
   data: () => ({
-    showForm: false,
+    dialog: false,
     pageNum: 1,
     sendDate: '',
     sendCategory: '',
@@ -85,7 +101,7 @@ export default {
     showPopup: false,
     ModalWindoW: '',
     modalWindowSettings: {},
-    chartDataSend: [0, 0, 0, 0],
+    chartDataSend: [],
     chartOptions: {
       responsive: true,
       maintainAspectRatio: false
@@ -111,6 +127,9 @@ export default {
     ),
     addNewPayment (data) {
       this.$store.commit('addItemToPaymentList', data)
+    },
+    closeAddPaymentForm () {
+      this.dialog = false
     },
     changePayment (itemId, data) {
       console.log('data', data)
@@ -148,10 +167,10 @@ export default {
       arDataChart[1] = this.getCategorySumm('Education')
       arDataChart[2] = this.getCategorySumm('Sport')
       arDataChart[3] = this.getCategorySumm('Entertaiment')
+      arDataChart[4] = this.getCategorySumm('Transport')
       this.chartDataSend = [...arDataChart]
     }
   },
-
   watch: {
     $route (to, from) {
       this.addItem()
@@ -174,16 +193,6 @@ export default {
 
 <style lang="sass">
 
-.chart-container
-
-.autoAddLinks
-  display: flex
-  flex-direction: column
-
-.container
-  margin: 0 auto
-  max-width: 1100px
-
 #app
   font-family: Avenir, Helvetica, Arial, sans-serif
   -webkit-font-smoothing: antialiased
@@ -194,8 +203,5 @@ export default {
 
 button
   cursor: pointer
-
-.header
-  color: red
 
 </style>

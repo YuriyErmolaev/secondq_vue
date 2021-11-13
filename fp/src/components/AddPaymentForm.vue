@@ -1,14 +1,15 @@
 <template>
-  <div class="form">
-    <input placeholder="Date" v-model="date" name="date" />
-    <input placeholder="Amount" v-model="value" name="amount" />
-    <select v-model="category" name="category">
-      <option v-for="(categoryName, idx) in categoryList" :key="idx">
-        {{ categoryName }}
-      </option>
-    </select>
-    <button @click="onSaveClick" >Save!</button>
-  </div>
+  <v-card class="pa-8">
+    <v-text-field placeholder="Date" v-model="date" name="date"></v-text-field>
+    <v-text-field placeholder="Amount" v-model="value" name="amount"></v-text-field>
+    <v-select label="Category" v-model="category" :items="categoryList"></v-select>
+    <v-card-actions>
+      <v-btn @click="onSaveClick">Save</v-btn>
+      <v-btn @click="closeForm">
+        Cancel
+      </v-btn>
+    </v-card-actions>
+  </v-card>
 </template>
 
 <script>
@@ -43,7 +44,6 @@ export default {
       }
       console.log('this.edit', this.edit)
       if (this.edit) {
-        // this.$emit('changePayment', this.itemId, data)
         const complexData = {
           itemId: this.itemId,
           data: data
@@ -52,6 +52,10 @@ export default {
       } else {
         this.$emit('addNewPayment', data)
       }
+      this.closeForm()
+    },
+    closeForm () {
+      this.$emit('closeAddPaymentForm')
     },
     fillForm () {
       const category = this.$route.params.category

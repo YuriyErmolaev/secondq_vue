@@ -1,33 +1,34 @@
 <template>
-  <table>
-    <tr>
-      <th>№</th>
-      <th>Date</th>
-      <th>Category</th>
-      <th>Amount</th>
-    </tr>
-    <tr v-for="(item, idx) in items" :key="idx">
-      <td>
+  <v-container>
+    <v-row>
+      <v-col :cols="1">№</v-col>
+      <v-col :cols="4">Date</v-col>
+      <v-col :cols="4">Category</v-col>
+      <v-col :cols="2">Amount</v-col>
+      <v-col :cols="1">Edit</v-col>
+    </v-row>
+    <v-row v-for="(item, idx) in items" :key="idx">
+      <v-col :cols="1">
         {{item.id}}
-      </td>
-      <td>
+      </v-col>
+      <v-col :cols="4">
         {{item.date}}
-      </td>
-      <td>
+      </v-col>
+      <v-col :cols="4">
         {{item.category}}
-      </td>
-      <td>
+      </v-col>
+      <v-col :cols="2">
         {{item.value}}
-      </td>
-      <td>
-        <div class="dotsMenu" @click="showMenu(item.id)">
+      </v-col>
+      <v-col :cols="1">
+        <div class="dotsMenu mt-" @click="showMenu(item.id)">
           <span class="dot">.</span>
           <span class="dot">.</span>
           <span class="dot">.</span>
         </div>
-      </td>
-    </tr>
-  </table>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -65,12 +66,12 @@ export default {
     display: flex
     flex-direction: column
     cursor: pointer
-    width: 20px
-    height: 50px
+    width: 30px
     align-items: center
     .dot
       display: inline-block
       font-size: 25px
+      line-height: 2px
       height: 7px
 
   table

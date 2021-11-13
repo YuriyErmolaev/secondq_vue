@@ -9,10 +9,10 @@ export default {
   ],
   data: () => ({
     chartData: {
-      labels: ['Food', 'Education', 'Sport', 'Entertaiment'],
+      labels: ['Food', 'Education', 'Sport', 'Entertaiment', 'Transport'],
       datasets: [
         {
-          data: [0, 0, 0, 0],
+          data: [0, 0, 0, 0, 0],
           backgroundColor: [
             'rgba(255, 99, 132, 0.2)',
             'rgba(54, 162, 235, 0.2)',
