@@ -33,23 +33,15 @@
         </v-row>
         <v-row>
           <v-col class="pa-8" md="6">
-            <v-dialog v-model="dialog" width="500">
-              <template v-slot:activator="{on}">
-                <v-btn class="ma-8" v-on="on">
-                  ADD NEW COST
-                </v-btn>
-              </template>
-              <add-payment-form
-                  @addNewPayment="addNewPayment"
-                  @changePayment="changePayment"
-                  @closeAddPaymentForm="closeAddPaymentForm"
-                  :category-list="getCategoryList"
-                  :pdate="sendDate"
-                  :pcategory="sendCategory"
-                  :pvalue="sendValue"
-                />
-            </v-dialog>
-
+            <add-payment-form
+                @addNewPayment="addNewPayment"
+                @changePayment="changePayment"
+                @visibilityAddPaymentForm="visibilityAddPaymentForm"
+                :category-list="getCategoryList"
+                :pdate="sendDate"
+                :pcategory="sendCategory"
+                :pvalue="sendValue"
+              />
             <Popup
               v-show="showPopup"
               :ModalWindoW="ModalWindoW"
@@ -93,7 +85,6 @@ export default {
     Popup
   },
   data: () => ({
-    dialog: false,
     pageNum: 1,
     sendDate: '',
     sendCategory: '',
@@ -128,19 +119,12 @@ export default {
     addNewPayment (data) {
       this.$store.commit('addItemToPaymentList', data)
     },
-    closeAddPaymentForm () {
-      this.dialog = false
+    visibilityAddPaymentForm (visibility) {
+      this.dialog = visibility
     },
     changePayment (itemId, data) {
       console.log('data', data)
       this.$store.commit('changeItemInPaymentList', itemId, data)
-    },
-    addItem () {
-      const category = this.$route.params.category
-      const value = this.$route.query.value
-      if (category || value) {
-        this.showForm = true
-      }
     },
     onShown (settings) {
       this.showPopup = true
@@ -172,9 +156,6 @@ export default {
     }
   },
   watch: {
-    $route (to, from) {
-      this.addItem()
-    },
     paymentsList () {
       this.updateChartData()
     }
@@ -182,6 +163,7 @@ export default {
   mounted () {
     this.$modal.EventBus.$on('shown', this.onShown)
     this.$modal.EventBus.$on('hide', this.onHide)
+    this.formInit()
     this.updateChartData()
   },
   created () {

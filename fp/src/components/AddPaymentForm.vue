@@ -1,15 +1,22 @@
 <template>
-  <v-card class="pa-8">
-    <v-text-field placeholder="Date" v-model="date" name="date"></v-text-field>
-    <v-text-field placeholder="Amount" v-model="value" name="amount"></v-text-field>
-    <v-select label="Category" v-model="category" :items="categoryList"></v-select>
-    <v-card-actions>
-      <v-btn @click="onSaveClick">Save</v-btn>
-      <v-btn @click="closeForm">
-        Cancel
+  <v-dialog v-model="dialog" width="500">
+    <template v-slot:activator="{on}">
+      <v-btn class="ma-8" v-on="on">
+        ADD NEW COST
       </v-btn>
-    </v-card-actions>
-  </v-card>
+    </template>
+    <v-card class="pa-8">
+      <v-text-field placeholder="Date" v-model="date" name="date"></v-text-field>
+      <v-text-field placeholder="Amount" v-model="value" name="amount"></v-text-field>
+      <v-select label="Category" v-model="category" :items="categoryList"></v-select>
+      <v-card-actions>
+        <v-btn class="ma-4" @click="onSaveClick">Save</v-btn>
+        <v-btn class="ma-4" @click="closeForm">
+          Cancel
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>
@@ -30,6 +37,7 @@ export default {
   },
   data () {
     return {
+      dialog: false,
       date: '',
       category: '',
       value: ''
@@ -42,7 +50,6 @@ export default {
         category: this.category,
         value: Number(this.value)
       }
-      console.log('this.edit', this.edit)
       if (this.edit) {
         const complexData = {
           itemId: this.itemId,
@@ -55,7 +62,10 @@ export default {
       this.closeForm()
     },
     closeForm () {
-      this.$emit('closeAddPaymentForm')
+      this.dialog = false
+    },
+    openForm () {
+      this.dialog = true
     },
     fillForm () {
       const category = this.$route.params.category
@@ -81,6 +91,8 @@ export default {
   },
   watch: {
     $route (to, from) {
+      console.log('change')
+      this.openForm()
       this.fillForm()
     }
   }

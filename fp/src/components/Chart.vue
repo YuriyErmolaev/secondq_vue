@@ -37,7 +37,6 @@ export default {
   methods: {
     renderDChart () {
       this.chartData.datasets[0].data = this.chartdata
-      console.log('this.chartdata', this.chartdata)
       this.renderChart(this.chartData, this.options)
     }
   },
