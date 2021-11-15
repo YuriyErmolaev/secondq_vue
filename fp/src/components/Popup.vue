@@ -1,13 +1,15 @@
 <template>
-  <div class="popup">
-    <component
-      :is="modalWindowSettings.modalWindowContent"
-      :itemId="modalWindowSettings.itemId"
-      :edit="modalWindowSettings.edit"
-      :category-list="modalWindowSettings.categoryList"
-    />
-    <button class="close" @click="$modal.hide()">close</button>
-  </div>
+  <v-dialog v-model="dialog2" width="500">
+      <v-card class="pa-8">
+        <component
+          :is="modalWindowSettings.modalWindowContent"
+          :itemId="modalWindowSettings.itemId"
+          :edit="modalWindowSettings.edit"
+          :category-list="modalWindowSettings.categoryList"
+        />
+        <v-btn class="ma-6" @click="dialog2 = false">Cancel popup</v-btn>
+      </v-card>
+    </v-dialog>
 </template>
 
 <script>
@@ -22,7 +24,28 @@ export default {
   },
   props: {
     ModalWindoW: String,
+    showDialog: Boolean,
     modalWindowSettings: Object
+  },
+  data: () => ({
+    dialog2: false
+  }),
+  watch: {
+    showDialog (newShowDialog, oldShowDialog) {
+      console.log('click from list')
+      console.log('modalWindowSettings to popup', this.modalWindowSettings)
+      this.dialog2 = newShowDialog
+
+      if (this.modalWindowSettings.edit) {
+        console.log('popup edit')
+        // this.$modal.hide()
+        // this.dialog = true
+
+        this.dialog2 = false
+        console.log('modalWindowSettings to popup', this.modalWindowSettings)
+        this.$modal.show()
+      }
+    }
   }
 }
 </script>

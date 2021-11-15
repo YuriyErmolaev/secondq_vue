@@ -1,8 +1,10 @@
 <template>
 <div class="wrapSubMenu">
-  itemId: {{itemId}}
-  <button @click="editItem">Edit</button>
-  <button @click="deleteItem">Delete</button>
+  <h5 class="text--accent-6 ma-4">
+    ITEM ID: {{itemId}}
+  </h5>
+  <v-btn @click="editItem">Edit</v-btn>
+  <v-btn @click="deleteItem">Delete</v-btn>
 </div>
 </template>
 
@@ -17,14 +19,19 @@ export default {
   methods: {
     editItem () {
       this.$modal.hide()
+      console.log('click edit')
       const title = 'Edit'
+
       const settings = {
         modalWindowContent: 'AddPaymentForm',
         itemId: this.itemId,
         edit: true,
         categoryList: this.getCategoryList
       }
-      this.$modal.show(title, settings)
+      setTimeout(() => {
+        this.$modal.show(title, true, settings)
+      }, 1000)
+      // this.$modal.show(title, true, settings)
     },
     deleteItem () {
       this.$store.commit('delItemFromPaymentList', this.itemId)
@@ -43,4 +50,7 @@ export default {
 <style scoped lang="sass">
   button
     margin: 10px
+  .wrapSubMenu
+    display: flex
+    flex-direction: column
 </style>

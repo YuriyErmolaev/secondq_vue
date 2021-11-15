@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button @click="changePage(buttonNum)" v-for="(buttonNum, idx) in buttons" :key="idx">{{buttonNum}}</button>
+    <v-btn @click="changePage(buttonNum)" v-for="(buttonNum, idx) in buttons" :key="idx">{{buttonNum}}</v-btn>
   </div>
 </template>
 

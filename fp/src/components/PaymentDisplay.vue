@@ -50,12 +50,11 @@ export default {
   },
   methods: {
     showMenu (id) {
-      const title = 'Menu'
       const settings = {
         modalWindowContent: 'SubMenu',
         itemId: id
       }
-      this.$modal.show(title, settings)
+      this.$modal.show('Menu', true, settings)
     }
   }
 }

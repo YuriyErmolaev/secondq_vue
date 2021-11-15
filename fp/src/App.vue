@@ -34,17 +34,17 @@
         <v-row>
           <v-col class="pa-8" md="6">
             <add-payment-form
-                @addNewPayment="addNewPayment"
-                @changePayment="changePayment"
-                @visibilityAddPaymentForm="visibilityAddPaymentForm"
-                :category-list="getCategoryList"
-                :pdate="sendDate"
-                :pcategory="sendCategory"
-                :pvalue="sendValue"
-              />
+              @addNewPayment="addNewPayment"
+              @changePayment="changePayment"
+              @visibilityAddPaymentForm="visibilityAddPaymentForm"
+              :category-list="getCategoryList"
+              :pdate="sendDate"
+              :pcategory="sendCategory"
+              :pvalue="sendValue"
+            />
             <Popup
-              v-show="showPopup"
               :ModalWindoW="ModalWindoW"
+              :showDialog="showDialog"
               :modalWindowSettings="modalWindowSettings"
             />
             <PaymentDisplay
@@ -89,8 +89,9 @@ export default {
     sendDate: '',
     sendCategory: '',
     sendValue: '',
-    showPopup: false,
+    showPopup: true,
     ModalWindoW: '',
+    showDialog: false,
     modalWindowSettings: {},
     chartDataSend: [],
     chartOptions: {
@@ -120,21 +121,21 @@ export default {
       this.$store.commit('addItemToPaymentList', data)
     },
     visibilityAddPaymentForm (visibility) {
-      this.dialog = visibility
+      this.dialog2 = visibility
     },
     changePayment (itemId, data) {
       console.log('data', data)
       this.$store.commit('changeItemInPaymentList', itemId, data)
     },
-    onShown (settings) {
-      this.showPopup = true
-      this.ModalWindoW = settings.name
-      this.modalWindowSettings = settings
+    onShown (data) {
+      this.ModalWindoW = data.title
+      this.showDialog = data.showDialog
+      this.modalWindowSettings = data.settings
     },
     onHide () {
-      this.showPopup = false
       this.ModalWindoW = ''
       this.modalWindowSettings = {}
+      this.showDialog = false
     },
     getCategorySumm (category) {
       const paymentsList = this.$store.getters.getPaymentsList
@@ -163,7 +164,6 @@ export default {
   mounted () {
     this.$modal.EventBus.$on('shown', this.onShown)
     this.$modal.EventBus.$on('hide', this.onHide)
-    this.formInit()
     this.updateChartData()
   },
   created () {

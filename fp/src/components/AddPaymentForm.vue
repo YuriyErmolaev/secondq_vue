@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" width="500">
+  <v-dialog v-model="dialog1" width="500">
     <template v-slot:activator="{on}">
       <v-btn class="ma-8" v-on="on">
         ADD NEW COST
@@ -12,7 +12,7 @@
       <v-card-actions>
         <v-btn class="ma-4" @click="onSaveClick">Save</v-btn>
         <v-btn class="ma-4" @click="closeForm">
-          Cancel
+          Cancel payment form
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -37,7 +37,7 @@ export default {
   },
   data () {
     return {
-      dialog: false,
+      dialog1: false,
       date: '',
       category: '',
       value: ''
@@ -62,10 +62,10 @@ export default {
       this.closeForm()
     },
     closeForm () {
-      this.dialog = false
+      this.dialog1 = false
     },
     openForm () {
-      this.dialog = true
+      this.dialog1 = true
     },
     fillForm () {
       const category = this.$route.params.category
@@ -89,16 +89,23 @@ export default {
       return `${d}.${m}.${y}`
     }
   },
+  mounted () {
+  },
   watch: {
     $route (to, from) {
-      console.log('change')
       this.openForm()
       this.fillForm()
+    },
+    dialog1 () {
+      console.log('edit')
+    },
+    edit () {
+      console.log('edit2')
     }
+
   }
 }
 </script>
 
 <style scoped>
-
 </style>
